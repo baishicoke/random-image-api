@@ -23,9 +23,13 @@
     ? candidates[Math.floor(Math.random() * candidates.length)]
     : all[Math.floor(Math.random() * all.length)];
 
-  // 本地相对路径补全
-  const fullUrl = selected.startsWith('http') ? selected : location.origin + '/' + selected;
+  // 修复本地路径，自动加仓库路径
+  const basePath = location.pathname.replace(/\/$/, ''); // 当前仓库路径
+  const fullUrl = selected.startsWith('http') 
+    ? selected 
+    : `${location.origin}${basePath}/${encodeURIComponent(selected)}`;
 
+  // 跳转到图片
   window.location.href = fullUrl;
 })();
 </script>
