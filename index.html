@@ -25,6 +25,8 @@
 <script>
 (async () => {
   try {
+    console.log('脚本加载完成');
+
     // 判断设备类型
     const ua = navigator.userAgent;
     const isMobile = /iPhone|iPad|iPod|Android/i.test(ua);
@@ -44,9 +46,12 @@
 
     // 修复路径：去掉开头的 '/' 并编码中文字符
     const cleanPath = selected.replace(/^\/+/, '');
+    const basePath = location.pathname.replace(/\/$/, ''); // 仓库路径
     const fullUrl = selected.startsWith('http')
       ? selected
-      : `${location.origin}${location.pathname}${encodeURIComponent(cleanPath)}`;
+      : `${location.origin}${basePath}/${encodeURIComponent(cleanPath)}`;
+
+    console.log('显示图片：', fullUrl);
 
     // 创建 img 元素显示图片
     const img = document.createElement('img');
