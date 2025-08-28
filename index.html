@@ -7,12 +7,10 @@
 <body>
 <script>
 (async () => {
-  // 判断设备类型
   const ua = navigator.userAgent;
   const isMobile = /iPhone|iPad|iPod|Android/i.test(ua);
   const orientationPref = isMobile ? 'portrait' : 'landscape';
 
-  // 加载 images.json
   const res = await fetch('images.json');
   const data = await res.json();
 
@@ -23,13 +21,12 @@
     ? candidates[Math.floor(Math.random() * candidates.length)]
     : all[Math.floor(Math.random() * all.length)];
 
-  // 修复本地路径，自动加仓库路径
-  const basePath = location.pathname.replace(/\/$/, ''); // 当前仓库路径
+  // 修复路径：去掉开头的 '/'，并加上仓库目录
+  const cleanPath = selected.replace(/^\/+/, '');
   const fullUrl = selected.startsWith('http') 
-    ? selected 
-    : `${location.origin}${basePath}/${encodeURIComponent(selected)}`;
+      ? selected 
+      : `${location.origin}${location.pathname}${cleanPath}`;
 
-  // 跳转到图片
   window.location.href = fullUrl;
 })();
 </script>
