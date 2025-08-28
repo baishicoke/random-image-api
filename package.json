@@ -1,0 +1,19 @@
+{
+  "name": "random-image-api",
+  "version": "1.0.0",
+  "description": "Random image API using GitHub Pages with local and remote images",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "generate": "node scripts/generate-images-json.js"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2",
+    "probe-image-size": "^7.1.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "author": "YourName",
+  "license": "MIT"
+}
