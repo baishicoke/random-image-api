@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Random Image API</title>
   <style>
-    body, html {
+    html, body {
       margin: 0;
       padding: 0;
       width: 100%;
@@ -17,35 +17,45 @@
     img {
       max-width: 100%;
       max-height: 100%;
+      object-fit: contain;
     }
   </style>
 </head>
 <body>
 <script>
 (async () => {
-  const ua = navigator.userAgent;
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(ua);
-  const orientationPref = isMobile ? 'portrait' : 'landscape';
+  try {
+    // 判断设备类型
+    const ua = navigator.userAgent;
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(ua);
+    const orientationPref = isMobile ? 'portrait' : 'landscape';
 
-  const res = await fetch('images.json');
-  const data = await res.json();
+    // 加载 images.json
+    const res = await fetch('images.json');
+    const data = await res.json();
 
-  const candidates = data[orientationPref] || [];
-  const all = [...(data.landscape || []), ...(data.portrait || [])];
+    // 获取候选图片
+    const candidates = data[orientationPref] || [];
+    const all = [...(data.landscape || []), ...(data.portrait || [])];
 
-  const selected = candidates.length > 0
-    ? candidates[Math.floor(Math.random() * candidates.length)]
-    : all[Math.floor(Math.random() * all.length)];
+    const selected = candidates.length > 0
+      ? candidates[Math.floor(Math.random() * candidates.length)]
+      : all[Math.floor(Math.random() * all.length)];
 
-  const cleanPath = selected.replace(/^\/+/, '');
-  const fullUrl = selected.startsWith('http') 
-      ? selected 
-      : `${location.origin}${location.pathname}${cleanPath}`;
+    // 修复路径：去掉开头的 '/' 并编码中文字符
+    const cleanPath = selected.replace(/^\/+/, '');
+    const fullUrl = selected.startsWith('http')
+      ? selected
+      : `${location.origin}${location.pathname}${encodeURIComponent(cleanPath)}`;
 
-  // 创建 img 元素显示图片，不跳转
-  const img = document.createElement('img');
-  img.src = fullUrl;
-  document.body.appendChild(img);
+    // 创建 img 元素显示图片
+    const img = document.createElement('img');
+    img.src = fullUrl;
+    document.body.appendChild(img);
+
+  } catch (err) {
+    console.error('加载图片失败', err);
+  }
 })();
 </script>
 </body>
