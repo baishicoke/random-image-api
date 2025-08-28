@@ -1,0 +1,33 @@
+name: Generate Images List
+
+on:
+  push:
+    paths:
+      - "images/**"
+      - "urls.txt"
+      - "scripts/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install probe-image-size node-fetch
+
+      - name: Generate images.json
+        run: node scripts/generate-images-json.js
+
+      - name: Commit and push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add images.json
+          git commit -m "Update images.json [skip ci]" || echo "No changes"
+          git push
