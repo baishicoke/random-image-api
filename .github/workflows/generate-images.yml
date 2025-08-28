@@ -7,6 +7,9 @@ on:
       - "urls.txt"
       - "scripts/**"
 
+permissions:
+  contents: write   # 👈 必须加这行，允许写入
+
 jobs:
   build:
     runs-on: ubuntu-latest
